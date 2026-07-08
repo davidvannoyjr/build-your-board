@@ -1,0 +1,342 @@
+<title>Build Your Board — The Advisory Board Method</title>
+<style>
+  :root {
+    --field: #0D0D0D;
+    --panel: #161616;
+    --ink: #F2F2F2;
+    --silver: #9CA3AB;
+    --red: #C8102E;
+    --rule: rgba(255,255,255,.25);
+    --rule-soft: rgba(255,255,255,.12);
+    --display: 'Oswald', 'Avenir Next Condensed', 'Arial Narrow', 'Helvetica Neue', sans-serif;
+    --body: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --mono: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  }
+  html { background: var(--field); }
+  body {
+    background: var(--field);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.6;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- type ---------- */
+  .eyebrow {
+    font-family: var(--display);
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--silver);
+  }
+  h1 {
+    font-family: var(--display);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: clamp(52px, 9vw, 96px);
+    line-height: .95;
+    letter-spacing: .01em;
+    margin: 16px 0 0;
+    text-wrap: balance;
+  }
+  h1 .hit { color: var(--red); }
+  h2 {
+    font-family: var(--display);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 26px;
+    letter-spacing: .06em;
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--display);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: .08em;
+    margin: 0 0 8px;
+  }
+  p { margin: 0 0 16px; max-width: 68ch; }
+  .lede { font-size: 19px; color: var(--ink); max-width: 60ch; }
+  .support { color: var(--silver); }
+  strong { font-weight: 700; color: var(--ink); }
+
+  /* ---------- structure ---------- */
+  header.hero { padding: 88px 0 56px; border-bottom: 1px solid var(--rule); }
+  section { padding: 64px 0; border-bottom: 1px solid var(--rule); }
+  section:last-of-type { border-bottom: none; }
+
+  /* ---------- hero ---------- */
+  .hero-sub {
+    margin-top: 28px;
+    font-size: 20px;
+    color: var(--silver);
+    max-width: 56ch;
+  }
+  .hero-sub b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- logic strip ---------- */
+  .logic { display: flex; flex-wrap: wrap; gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); }
+  .logic > div { flex: 1 1 180px; background: var(--panel); padding: 22px 20px; }
+  .logic .k {
+    font-family: var(--display); text-transform: uppercase; letter-spacing: .12em;
+    font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;
+  }
+  .logic p { font-size: 14.5px; color: var(--silver); margin: 0; }
+
+  /* ---------- steps ---------- */
+  .step { display: grid; grid-template-columns: 84px 1fr; gap: 24px; padding: 32px 0; border-top: 1px solid var(--rule-soft); }
+  .step:first-of-type { border-top: none; padding-top: 8px; }
+  .step-no {
+    font-family: var(--display); font-weight: 700; font-size: 44px; line-height: 1;
+    color: var(--silver); font-variant-numeric: tabular-nums;
+  }
+  .step p { color: var(--silver); font-size: 15.5px; }
+  .step p b, .step p strong { color: var(--ink); }
+  @media (max-width: 560px) {
+    .step { grid-template-columns: 1fr; gap: 8px; }
+  }
+
+  /* ---------- roster table ---------- */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--rule-soft); }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14.5px; }
+  th {
+    font-family: var(--display); text-transform: uppercase; letter-spacing: .1em;
+    font-size: 12px; font-weight: 600; color: var(--silver);
+    text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--rule);
+    background: var(--panel);
+  }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  td:first-child { font-weight: 700; white-space: nowrap; }
+  td:nth-child(2) { color: var(--silver); }
+  td:nth-child(3) { color: var(--silver); }
+  tr.bench td:first-child { font-weight: 600; color: var(--silver); }
+  .bench-label td {
+    font-family: var(--display); text-transform: uppercase; letter-spacing: .14em;
+    font-size: 11.5px; color: var(--silver); background: var(--panel); padding: 8px 16px;
+  }
+
+  /* ---------- seat anatomy ---------- */
+  .anatomy { background: var(--panel); border: 1px solid var(--rule-soft); padding: 28px; }
+  .anatomy dl { margin: 0; display: grid; gap: 18px; }
+  .anatomy dt {
+    font-family: var(--display); text-transform: uppercase; letter-spacing: .1em;
+    font-size: 13px; font-weight: 600;
+  }
+  .anatomy dd { margin: 4px 0 0; color: var(--silver); font-size: 15px; max-width: 66ch; }
+
+  /* ---------- prompt block ---------- */
+  .promptbox { background: var(--panel); border: 1px solid var(--rule); position: relative; }
+  .promptbox .bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px; border-bottom: 1px solid var(--rule-soft);
+  }
+  .promptbox .bar span {
+    font-family: var(--display); text-transform: uppercase; letter-spacing: .14em;
+    font-size: 12px; font-weight: 600; color: var(--silver);
+  }
+  .copybtn {
+    font-family: var(--display); text-transform: uppercase; letter-spacing: .12em;
+    font-size: 12px; font-weight: 600;
+    background: var(--red); color: #fff; border: none; padding: 9px 18px; cursor: pointer;
+  }
+  .copybtn:hover { background: #A60D26; }
+  .copybtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  pre.prompt {
+    margin: 0; padding: 24px 20px; overflow-x: auto;
+    font-family: var(--mono); font-size: 13px; line-height: 1.7;
+    color: var(--ink); white-space: pre-wrap;
+  }
+
+  /* ---------- rules list ---------- */
+  ul.rules { list-style: none; margin: 0; padding: 0; }
+  ul.rules li {
+    padding: 14px 0 14px 26px; border-top: 1px solid var(--rule-soft);
+    color: var(--silver); font-size: 15.5px; position: relative; max-width: 70ch;
+  }
+  ul.rules li::before {
+    content: ""; position: absolute; left: 0; top: 24px;
+    width: 12px; height: 1px; background: var(--ink);
+  }
+  ul.rules li b { color: var(--ink); }
+
+  /* ---------- footer ---------- */
+  footer { padding: 56px 0 72px; }
+  .wordmark {
+    font-family: var(--display); text-transform: uppercase; font-weight: 700;
+    letter-spacing: .18em; font-size: 15px;
+  }
+  footer p { color: var(--silver); font-size: 13.5px; margin-top: 10px; }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">The Advisory Board Method &nbsp;·&nbsp; DVN Coaching</span>
+    <h1>Build Your <span class="hit">Board.</span></h1>
+    <p class="hero-sub">A room full of history's best business minds, arguing about <b>your</b> decisions, available at 5&nbsp;AM, at a cost of zero. Here is the exact method — steal it.</p>
+  </header>
+
+  <section>
+    <h2>The Logic</h2>
+    <p class="support">Most people use AI like a search bar: one question, one generic answer. An advisory board is a different machine. You define fixed expert seats, load each one with a real thinker's published doctrine, and force them to argue in front of you. Then one verdict — a single move, not a menu.</p>
+    <div class="logic">
+      <div><span class="k">Seats</span><p>Fixed experts, each owning one domain where your money actually moves.</p></div>
+      <div><span class="k">Doctrine</span><p>Each seat argues from a named thinker's published body of work — not generic advice.</p></div>
+      <div><span class="k">Conflict</span><p>Only relevant seats speak, and they disagree. A board that always agrees is a mirror.</p></div>
+      <div><span class="k">Verdict</span><p>The chair collapses the argument into one move. You leave with a decision.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Build — Five Steps</h2>
+
+    <div class="step">
+      <div class="step-no">01</div>
+      <div>
+        <h3>Pick seats where the money moves</h3>
+        <p>Not job titles — profit centers. List where every dollar in your business is actually won or lost: the words that generate response, the conversation that closes, the price, the offer, the systems, the risk. Each of those gets a seat. Six to eight seats. If two seats would say the same thing, cut one.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-no">02</div>
+      <div>
+        <h3>Name each seat from history</h3>
+        <p>Assign every seat a real thinker with a <b>documented public body of work</b> — books, letters, memos, decades on the record. The name isn't decoration: it pins the seat to a specific doctrine the AI already knows deeply, so the advice comes out sharp and in-voice instead of generic. Match on the depth of the published record, not on fame.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-no">03</div>
+      <div>
+        <h3>Write a doctrine file per seat</h3>
+        <p>One page per advisor: what they own, their core principles <b>translated to your numbers</b>, the works they argue from, and the lines they never cross. This is the difference between "act like Buffett" and a Buffett who knows your margins.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-no">04</div>
+      <div>
+        <h3>Lock your company model and filter</h3>
+        <p>Write one page the whole board reads before every session: your business model, your real numbers, your targets, and a decision filter every verdict must pass — for example: <b>does it drive revenue, is it ROI-positive in 90 days, can I execute it daily, does it remove friction.</b> Settled decisions get recorded so the board builds precedent instead of re-arguing.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-no">05</div>
+      <div>
+        <h3>Set the governance</h3>
+        <p>Only relevant seats speak — three to five per question, never all of them. Experts must disagree when they genuinely disagree. Every session ends in one directive. Freeze the roster; changes require a named trigger, not a mood. Then bring it a real decision: <b>"Board, here's my situation…"</b></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>A Working Roster</h2>
+    <p class="support">The board I run. Eight seats that speak when relevant, five bench advisors who wait to be called. Build yours around your own profit centers — this is a reference, not a prescription.</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th>Advisor</th><th>Seat</th><th>Argues from</th></tr>
+        <tr><td>David Ogilvy</td><td>Direct Response Copy</td><td>Confessions of an Advertising Man · Ogilvy on Advertising</td></tr>
+        <tr><td>Zig Ziglar</td><td>High-Ticket Closing</td><td>Secrets of Closing the Sale</td></tr>
+        <tr><td>Chris Voss</td><td>Negotiation</td><td>Never Split the Difference</td></tr>
+        <tr><td>Howard Marks</td><td>Pricing &amp; Market Cycles</td><td>The Oaktree memos · The Most Important Thing</td></tr>
+        <tr><td>Warren Buffett</td><td>Finance &amp; Margin</td><td>Berkshire shareholder letters, 1977–present</td></tr>
+        <tr><td>Alex Hormozi</td><td>Offer Architecture</td><td>$100M Offers · $100M Leads</td></tr>
+        <tr><td>Gary Vaynerchuk</td><td>Organic Content</td><td>Jab, Jab, Jab, Right Hook · Day Trading Attention</td></tr>
+        <tr><td>Jeff Bezos</td><td>Systems &amp; Automation</td><td>Amazon shareholder letters, 1997–2020</td></tr>
+        <tr class="bench-label"><td colspan="3">The Bench — speaks only when called</td></tr>
+        <tr class="bench"><td>Joe Girard</td><td>Database &amp; Retention</td><td>How to Sell Anything to Anybody</td></tr>
+        <tr class="bench"><td>Bill Campbell</td><td>Talent &amp; Leverage</td><td>Trillion Dollar Coach</td></tr>
+        <tr class="bench"><td>Claude Hopkins</td><td>Paid Media</td><td>Scientific Advertising</td></tr>
+        <tr class="bench"><td>Ray Dalio</td><td>Risk &amp; Compliance</td><td>Principles</td></tr>
+        <tr class="bench"><td>Naval Ravikant</td><td>Wealth &amp; Exit</td><td>The Almanack of Naval Ravikant</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Anatomy of a Seat File</h2>
+    <p class="support">Every advisor gets one page with five parts. Write it once; the seat advises from it forever.</p>
+    <div class="anatomy">
+      <dl>
+        <div><dt>Mandate</dt><dd>What this seat owns and where it stops. Clean lanes — the copywriter owns the words, the closer owns the conversation they start.</dd></div>
+        <div><dt>Doctrine</dt><dd>Five to eight of the advisor's published principles, each one already translated to your business. Not "never lose money" — "never trade the 90% margin machine for a revenue headline."</dd></div>
+        <div><dt>Canon</dt><dd>The named works the seat argues from, so you can push deeper: "what would the 1997 letter say about this?"</dd></div>
+        <div><dt>Data pulls</dt><dd>The live numbers this seat checks before speaking — CRM, books, pipeline. No advising from memory when real data exists.</dd></div>
+        <div><dt>Red lines</dt><dd>What the seat never blesses, no matter how good the idea sounds. This is where the board earns its keep.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Starter Prompt</h2>
+    <p class="support">Paste this into any capable AI chat, fill the brackets, and you have a working board in one message. The full method above — doctrine files, company model, precedent — is what turns this from a party trick into infrastructure.</p>
+    <div class="promptbox">
+      <div class="bar">
+        <span>Copy · Paste · Convene</span>
+        <button class="copybtn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+      <pre class="prompt" id="prompt">Act as my private advisory board. Fill these seats, each held by the named
+thinker, advising strictly from their published body of work, in their own
+voice:
+
+1. [THINKER] — [DOMAIN, e.g. Direct Response Copy]
+2. [THINKER] — [DOMAIN]
+3. [THINKER] — [DOMAIN]
+4. [THINKER] — [DOMAIN]
+5. [THINKER] — [DOMAIN]
+6. [THINKER] — [DOMAIN]
+
+My business: [ONE PARAGRAPH — what you sell, to whom, your real numbers,
+your target].
+
+Rules:
+- When I bring a situation, only the relevant seats speak — never all of them.
+- Each expert answers in their own voice, 3–5 sentences, with conviction:
+  what they see, what they'd do, what they'd warn against.
+- Experts must disagree when they genuinely disagree. Name the conflict.
+- End every session with THE VERDICT: one move, stated as a directive.
+  Resolve conflicts — never average them.
+- Every verdict must pass this filter: [YOUR 3–4 DECISION CRITERIA].
+  If the best move fails the filter, the verdict is "do nothing" and why.
+
+Confirm the board is assembled and wait for my first situation. I will
+open with: "Board, here's my situation…"</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Rules That Make It Work</h2>
+    <ul class="rules">
+      <li><b>Only relevant seats speak.</b> Eight voices on every question is noise. Three sharp perspectives beat eight polite ones.</li>
+      <li><b>Disagreement is the product.</b> If your board never argues, you built a mirror with extra steps. Prompt for conflict explicitly.</li>
+      <li><b>One move, not a menu.</b> The verdict is a directive. Options are the board's failure to do its job.</li>
+      <li><b>Precedent compounds.</b> Record every verdict. A board with memory stops re-arguing settled questions and starts building on them.</li>
+      <li><b>Real numbers or silence.</b> A seat that can check your actual data before speaking is an advisor. One that can't is a fortune cookie.</li>
+      <li><b>"Do nothing" is a verdict.</b> The filter exists to kill clever ideas that don't pay. Let it.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="wordmark">DVN Coaching</div>
+    <p>Built and battle-tested inside a solo real estate operation doing 75 listing sides a year. The board ruled on its own existence — the verdict was yes.</p>
+  </footer>
+
+</div>
+
+<script>
+  function copyPrompt(btn) {
+    var text = document.getElementById('prompt').textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      var old = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(function () { btn.textContent = old; }, 1600);
+    });
+  }
+</script>
